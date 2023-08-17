@@ -8,14 +8,14 @@ dependencies:
   preact:
     specifier: ^10.16.0
     version: 10.16.0
-  prettier:
-    specifier: ^3.0.2
-    version: 3.0.2
 
 devDependencies:
   '@preact/preset-vite':
     specifier: ^2.5.0
     version: 2.5.0(@babel/core@7.22.10)(preact@10.16.0)(vite@4.4.5)
+  prettier:
+    specifier: ^3.0.2
+    version: 3.0.2
   typescript:
     specifier: ^5.0.2
     version: 5.0.2
@@ -782,7 +782,7 @@ packages:
     resolution: {integrity: sha512-o2YR9qtniXvwEZlOKbveKfDQVyqxbEIWn48Z8m3ZJjBjcCmUy3xZGIv+7AkaeuaTr6yPXJjwv07ZWlsWbEy1rQ==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: false
+    dev: true
 
   /resolve@1.22.4:
     resolution: {integrity: sha512-PXNdCiPqDqeUou+w1C2eTQbNfxKSuMxqTCuvlmmMsk1NWHL5fRrhY6Pl0qEYYc6+QqGClco1Qj8XnjPego4wfg==}
