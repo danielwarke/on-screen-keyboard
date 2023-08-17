@@ -5,14 +5,14 @@ interface KeyButtonProps {
   keyConfig: KeyConfig;
   isShift: boolean;
   isCaps: boolean;
-  onClick: (value: string, special?: boolean) => void;
+  onKeyClick: (value: string, special?: boolean) => void;
 }
 
 const KeyButton: FC<KeyButtonProps> = ({
   keyConfig,
   isShift,
   isCaps,
-  onClick,
+  onKeyClick,
 }) => {
   const keyValue = useMemo(() => {
     if (typeof keyConfig === "string") {
@@ -24,16 +24,15 @@ const KeyButton: FC<KeyButtonProps> = ({
       : keyConfig.value;
   }, [keyConfig, isShift, isCaps]);
 
+  function clickHandler() {
+    onKeyClick(
+      String(keyValue),
+      typeof keyConfig === "object" && keyConfig.special,
+    );
+  }
+
   return (
-    <button
-      className="key-button"
-      onClick={() =>
-        onClick(
-          String(keyValue),
-          typeof keyConfig === "object" && keyConfig.special,
-        )
-      }
-    >
+    <button className="key-button" onClick={clickHandler}>
       {keyValue}
     </button>
   );

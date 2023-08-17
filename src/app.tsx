@@ -1,10 +1,11 @@
-import { useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import { keys } from "./keys.ts";
 import KeyButton from "./components/KeyButton.tsx";
 import "./app.css";
 
 export function App() {
-  const [input, setInput] = useState("");
+  const initialPress = useRef(true);
+  const [input, setInput] = useState("Click a key to start entering text");
   const [isShift, setIsShift] = useState(false);
   const [isCaps, setIsCaps] = useState(false);
 
@@ -12,48 +13,64 @@ export function App() {
     if (special) {
       switch (value) {
         case "shift":
-          setIsShift((val) => !val);
+          setIsShift((currIsShift) => !currIsShift);
           break;
         case "caps":
-          setIsCaps((val) => !val);
+          setIsCaps((currIsCaps) => !currIsCaps);
           break;
         case "back":
-          setInput((i) => i.substring(0, i.length - 1));
+          if (initialPress.current) {
+            setInput("");
+            initialPress.current = false;
+          } else {
+            setInput((currInput) =>
+              currInput.substring(0, currInput.length - 1),
+            );
+          }
       }
 
       return;
     }
 
-    setInput((i) => i + value);
+    if (initialPress.current) {
+      setInput(value);
+      initialPress.current = false;
+    } else {
+      setInput((currInput) => currInput + value);
+    }
+
     if (isShift) {
       setIsShift(false);
     }
   }
 
+  function onSpaceClick() {
+    onKeyClick(" ");
+  }
+
   return (
     <div className="container">
       <h2 className="user-input">
-        {input || "Click a key to start entering text"}
+        {input}
+        <span className="blinking-cursor">|</span>
       </h2>
       <div>
-        {keys.map((row, idx) => (
-          <div key={idx}>
-            {row.map((keyConfig, keyIdx) => {
-              return (
-                <KeyButton
-                  key={keyIdx}
-                  keyConfig={keyConfig}
-                  isShift={isShift}
-                  isCaps={isCaps}
-                  onClick={onKeyClick}
-                />
-              );
-            })}
+        {keys.map((row, rowIdx) => (
+          <div key={rowIdx}>
+            {row.map((keyConfig, keyIdx) => (
+              <KeyButton
+                key={keyIdx}
+                keyConfig={keyConfig}
+                isShift={isShift}
+                isCaps={isCaps}
+                onKeyClick={onKeyClick}
+              />
+            ))}
           </div>
         ))}
         <button
           className="key-button space-bar"
-          onClick={() => setInput((i) => i + " ")}
+          onClick={onSpaceClick}
         ></button>
       </div>
     </div>
